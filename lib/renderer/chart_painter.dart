@@ -418,7 +418,7 @@ class ChartPainter extends BaseChartPainter {
         offsetX = 0;
         break;
       case VerticalTextAlignment.right:
-        offsetX = mWidth - tp.width;
+        offsetX = mWidth + 40 - tp.width;
         break;
     }
 

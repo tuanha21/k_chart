@@ -21,7 +21,7 @@ class ChartColors {
   Color jColor = Color(0xff9979C6);
   Color rsiColor = Color(0xffC9B885);
 
-  Color defaultTextColor = Color(0xff60738E);
+  Color defaultTextColor = Color(0xFF879391);
 
   Color nowPriceUpColor = Color(0xff4DAA90);
   Color nowPriceDnColor = Color(0xffC15466);

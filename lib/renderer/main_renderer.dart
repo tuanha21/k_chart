@@ -115,7 +115,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   void drawChart(CandleEntity lastPoint, CandleEntity curPoint, double lastX,
       double curX, Size size, Canvas canvas) {
     if (isLine != true) {
-      drawCandle(curPoint, canvas, curX);
+      drawCandle(curPoint, canvas, size, curX);
     }
     if (isLine == true) {
       drawPolyline(lastPoint.close, curPoint.close, canvas, lastX, curX);
@@ -135,17 +135,9 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   //Draw a line chart
   drawPolyline(double lastPrice, double curPrice, Canvas canvas, double lastX,
       double curX) {
-//    drawLine(lastPrice + 100, curPrice + 100, canvas, lastX, curX, ChartColors.kLineColor);
     mLinePath ??= Path();
 
-//    if (lastX == curX) {
-//      mLinePath.moveTo(lastX, getY(lastPrice));
-//    } else {
-////      mLinePath.lineTo(curX, getY(curPrice));
-//      mLinePath.cubicTo(
-//          (lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2, getY(curPrice), curX, getY(curPrice));
-//    }
-    if (lastX == curX) lastX = 0; //起点位置填充
+    if (lastX == curX) lastX = 0; //Fill from the starting point
     mLinePath!.moveTo(lastX, getY(lastPrice));
     mLinePath!.cubicTo((lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2,
         getY(curPrice), curX, getY(curPrice));
@@ -206,7 +198,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     }
   }
 
-  void drawCandle(CandleEntity curPoint, Canvas canvas, double curX) {
+  void drawCandle(
+      CandleEntity curPoint, Canvas canvas, Size size, double curX) {
     var high = getY(curPoint.high);
     var low = getY(curPoint.low);
     var open = getY(curPoint.open);
@@ -255,10 +248,10 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       double offsetX;
       switch (verticalTextAlignment) {
         case VerticalTextAlignment.left:
-          offsetX = 0;
+          offsetX = chartRect.width + 40 - tp.width;
           break;
         case VerticalTextAlignment.right:
-          offsetX = chartRect.width - tp.width;
+          offsetX = chartRect.width + 40 - tp.width;
           break;
       }
 
@@ -279,8 +272,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     //   canvas.drawLine(Offset(0, rowSpace * i + topPadding),
     //       Offset(chartRect.width, rowSpace * i + topPadding), gridPaint);
     // }
-    double columnSpace = chartRect.width / gridColumns;
-    for (int i = 0; i <= columnSpace; i++) {
+    double columnSpace = size.width / gridColumns;
+    for (int i = 0; i <= gridColumns; i++) {
       double dashWidth = 4, dashSpace = 4, startY = 0;
       while (startY < size.width) {
         canvas.drawLine(Offset(columnSpace * i, startY),

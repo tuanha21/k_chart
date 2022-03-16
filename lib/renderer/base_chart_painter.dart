@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart'
-    show Color, TextStyle, Rect, Canvas, Size, CustomPainter;
+    show Canvas, Color, CustomPainter, FontWeight, Rect, Size, TextStyle;
 import 'package:k_chart/utils/date_format_util.dart';
 
 import '../chart_style.dart' show ChartStyle;
@@ -9,7 +9,15 @@ import '../entity/k_line_entity.dart';
 import '../k_chart_widget.dart';
 
 export 'package:flutter/material.dart'
-    show Color, required, TextStyle, Rect, Canvas, Size, CustomPainter;
+    show
+        Color,
+        required,
+        TextStyle,
+        Rect,
+        Canvas,
+        Size,
+        CustomPainter,
+        FontWeight;
 
 abstract class BaseChartPainter extends CustomPainter {
   static double maxScrollX = 0.0;
@@ -26,9 +34,9 @@ abstract class BaseChartPainter extends CustomPainter {
   bool isLine;
 
   //3 block size and location
-  late Rect mMainRect, mSecondRect;
+  late Rect mMainRect;
   Rect? mVolRect, mSecondaryRect;
-  late double mDisplayHeight, mWidth;
+  late double mDisplayHeight, mWidth, mTextWidth;
   double mTopPadding = 30.0, mBottomPadding = 20.0, mChildPadding = 12.0;
   int mGridRows = 8, mGridColumns = 8;
   int mStartIndex = 0, mStopIndex = 0;
@@ -109,10 +117,11 @@ abstract class BaseChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var _size = Size(size.width - 50, size.height);
+    var _size = Size(size.width - 40, size.height);
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     mDisplayHeight = size.height - mTopPadding - mBottomPadding;
-    mWidth = size.width;
+    mWidth = size.width - 40;
+    mTextWidth = size.width;
     initRect(size);
     calculateValue();
     initChartRenderer();
@@ -179,8 +188,6 @@ abstract class BaseChartPainter extends CustomPainter {
     mainHeight -= secondaryHeight;
 
     mMainRect = Rect.fromLTRB(0, mTopPadding, mWidth, mTopPadding + mainHeight);
-    mSecondRect =
-        Rect.fromLTRB(0, mTopPadding, mWidth - 40, mTopPadding + mainHeight);
 
     if (volHidden != true) {
       mVolRect = Rect.fromLTRB(0, mMainRect.bottom + mChildPadding, mWidth,
@@ -368,7 +375,7 @@ abstract class BaseChartPainter extends CustomPainter {
       (translateX + mTranslateX) * scaleX;
 
   TextStyle getTextStyle(Color color) {
-    return TextStyle(fontSize: 10.0, color: color);
+    return TextStyle(fontSize: 10.0, color: color, fontWeight: FontWeight.w500);
   }
 
   @override
