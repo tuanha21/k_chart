@@ -169,11 +169,11 @@ class ChartPainter extends BaseChartPainter {
   }
 
   @override
-  void drawGrid(canvas) {
+  void drawGrid(canvas, size) {
     if (!hideGrid) {
-      mMainRenderer.drawGrid(canvas, mGridRows, mGridColumns);
-      mVolRenderer?.drawGrid(canvas, mGridRows, mGridColumns);
-      mSecondaryRenderer?.drawGrid(canvas, mGridRows, mGridColumns);
+      mMainRenderer.drawGrid(canvas, size, mGridRows, mGridColumns);
+      mVolRenderer?.drawGrid(canvas, size, mGridRows, mGridColumns);
+      mSecondaryRenderer?.drawGrid(canvas, size, mGridRows, mGridColumns);
     }
   }
 
@@ -204,7 +204,9 @@ class ChartPainter extends BaseChartPainter {
   }
 
   @override
-  void drawVerticalText(canvas) {
+  void drawVerticalText(
+    canvas,
+  ) {
     var textStyle = getTextStyle(this.chartColors.defaultTextColor);
     if (!hideGrid) {
       mMainRenderer.drawVerticalText(canvas, textStyle, mGridRows);
@@ -317,18 +319,18 @@ class ChartPainter extends BaseChartPainter {
         selectorBorderPaint);
 
     dateTp.paint(canvas, Offset(x - textWidth / 2, y));
-    //长按显示这条数据详情
+    //Nhấn và giữ để hiển thị chi tiết của dữ liệu này
     sink?.add(InfoWindowEntity(point, isLeft: isLeft));
   }
 
   @override
   void drawText(Canvas canvas, KLineEntity data, double x) {
-    //长按显示按中的数据
+    //Nhấn và giữ để hiển thị dữ liệu trong báo chí
     if (isLongPress || (isTapShowInfoDialog && isOnTap)) {
       var index = calculateSelectedX(selectX);
       data = getItem(index);
     }
-    //松开显示最后一条数据
+    //Phát hành để hiển thị dữ liệu cuối cùng
     mMainRenderer.drawText(canvas, data, x);
     mVolRenderer?.drawText(canvas, data, x);
     mSecondaryRenderer?.drawText(canvas, data, x);
@@ -337,11 +339,11 @@ class ChartPainter extends BaseChartPainter {
   @override
   void drawMaxAndMin(Canvas canvas) {
     if (isLine == true) return;
-    //绘制最大值和最小值
+    //Lô tối đa và tối thiểu
     double x = translateXtoX(getX(mMainMinIndex));
     double y = getMainY(mMainLowMinValue);
     if (x < mWidth / 2) {
-      //画右边
+      //vẽ bên phải
       TextPainter tp = getTextPainter(
           "── " + mMainLowMinValue.toStringAsFixed(fixedLength),
           chartColors.minColor);
@@ -355,7 +357,7 @@ class ChartPainter extends BaseChartPainter {
     x = translateXtoX(getX(mMainMaxIndex));
     y = getMainY(mMainHighMaxValue);
     if (x < mWidth / 2) {
-      //画右边
+      //vẽ bên phải
       TextPainter tp = getTextPainter(
           "── " + mMainHighMaxValue.toStringAsFixed(fixedLength),
           chartColors.maxColor);
@@ -381,7 +383,7 @@ class ChartPainter extends BaseChartPainter {
     double value = datas!.last.close;
     double y = getMainY(value);
 
-    //视图展示区域边界值绘制
+    //View display area boundary value drawing
     if (y > getMainY(mMainLowMinValue)) {
       y = getMainY(mMainLowMinValue);
     }
@@ -394,7 +396,7 @@ class ChartPainter extends BaseChartPainter {
       ..color = value >= datas!.last.open
           ? this.chartColors.nowPriceUpColor
           : this.chartColors.nowPriceDnColor;
-    //先画横线
+    //Draw a horizontal line first
     double startX = 0;
     final max = -mTranslateX + mWidth / scaleX;
     final space =
@@ -406,7 +408,7 @@ class ChartPainter extends BaseChartPainter {
           nowPricePaint);
       startX += space;
     }
-    //再画背景和文本
+    //Repaint the background and text
     TextPainter tp = getTextPainter(
         value.toStringAsFixed(fixedLength), this.chartColors.nowPriceTextColor);
 
@@ -440,7 +442,7 @@ class ChartPainter extends BaseChartPainter {
     double y = selectY;
     // getMainY(point.close);
 
-    // k线图竖线
+    // K-line chart vertical line
     canvas.drawLine(Offset(x, mTopPadding),
         Offset(x, size.height - mBottomPadding), paintY);
     Paint paintX = Paint()
@@ -483,7 +485,7 @@ class ChartPainter extends BaseChartPainter {
     }
   }
 
-  ///画交叉线
+  ///draw a cross
   void drawCrossLine(Canvas canvas, Size size) {
     var index = calculateSelectedX(selectX);
     KLineEntity point = getItem(index);
@@ -493,7 +495,7 @@ class ChartPainter extends BaseChartPainter {
       ..isAntiAlias = true;
     double x = getX(index);
     double y = getMainY(point.close);
-    // k线图竖线
+    // K-line chart vertical line
     canvas.drawLine(Offset(x, mTopPadding),
         Offset(x, size.height - mBottomPadding), paintY);
 
@@ -501,7 +503,7 @@ class ChartPainter extends BaseChartPainter {
       ..color = this.chartColors.hCrossColor
       ..strokeWidth = this.chartStyle.hCrossWidth
       ..isAntiAlias = true;
-    // k线图横线
+    // K line chart horizontal line
     canvas.drawLine(Offset(-mTranslateX, y),
         Offset(-mTranslateX + mWidth / scaleX, y), paintX);
     if (scaleX >= 1) {
@@ -534,12 +536,12 @@ class ChartPainter extends BaseChartPainter {
 
   double getMainY(double y) => mMainRenderer.getY(y);
 
-  /// 点是否在SecondaryRect中
+  /// Whether the point is in SecondaryRect
   bool isInSecondaryRect(Offset point) {
     return mSecondaryRect?.contains(point) ?? false;
   }
 
-  /// 点是否在MainRect中
+  /// Is the point in MainRect
   bool isInMainRect(Offset point) {
     return mMainRect.contains(point);
   }

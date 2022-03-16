@@ -30,17 +30,20 @@ class KChartWidget extends StatefulWidget {
   final SecondaryState secondaryState;
   final Function()? onSecondaryTap;
   final bool isLine;
-  final bool isTapShowInfoDialog; //是否开启单击显示详情数据
+  final bool
+      isTapShowInfoDialog; //Whether to enable click to show detailed data
   final bool hideGrid;
   @Deprecated('Use `translations` instead.')
   final bool isChinese;
   final bool showNowPrice;
   final bool showInfoDialog;
-  final bool materialInfoDialog; // Material风格的信息弹窗
+  final bool materialInfoDialog; // Material style information popup
   final Map<String, ChartTranslations> translations;
   final List<String> timeFormat;
 
-  //当屏幕滚动到尽头会调用，真为拉到屏幕右侧尽头，假为拉到屏幕左侧尽头
+  ///It will be called when the screen is scrolled to the end,
+  ///true to the end of the right side of the screen,
+  ///false to the end of the left side of the screen
   final Function(bool)? onLoadMore;
 
   final int fixedLength;
@@ -79,7 +82,7 @@ class KChartWidget extends StatefulWidget {
     this.flingRatio = 0.5,
     this.flingCurve = Curves.decelerate,
     this.isOnDrag,
-    this.verticalTextAlignment = VerticalTextAlignment.left,
+    this.verticalTextAlignment = VerticalTextAlignment.right,
   });
 
   @override
@@ -162,7 +165,6 @@ class _KChartWidgetState extends State<KChartWidget>
       builder: (context, constraints) {
         mHeight = constraints.maxHeight;
         mWidth = constraints.maxWidth;
-
         return GestureDetector(
           onTapUp: (details) {
             if (!widget.isTrendLine &&
@@ -184,7 +186,8 @@ class _KChartWidgetState extends State<KChartWidget>
               enableCordRecord = false;
               Offset p1 = Offset(getTrendLineX(), mSelectY);
               if (!waitingForOtherPairofCords)
-                lines.add(TrendLine(p1, Offset(-1, -1), trendLineMax!, trendLineScale!));
+                lines.add(TrendLine(
+                    p1, Offset(-1, -1), trendLineMax!, trendLineScale!));
 
               if (waitingForOtherPairofCords) {
                 var a = lines.last;

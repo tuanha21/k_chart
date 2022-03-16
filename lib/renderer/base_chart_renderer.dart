@@ -46,7 +46,7 @@ abstract class BaseChartRenderer<T> {
     }
   }
 
-  void drawGrid(Canvas canvas, int gridRows, int gridColumns);
+  void drawGrid(Canvas canvas, Size size, int gridRows, int gridColumns);
 
   void drawText(Canvas canvas, T data, double x);
 

@@ -27,17 +27,17 @@ class ChartColors {
   Color nowPriceDnColor = Color(0xffC15466);
   Color nowPriceTextColor = Color(0xffffffff);
 
-  //深度颜色
+  //depth color
   Color depthBuyColor = Color(0xff60A893);
   Color depthSellColor = Color(0xffC15866);
 
-  //选中后显示值边框颜色
+  //Display value border color when selected
   Color selectBorderColor = Color(0xff6C7A86);
 
-  //选中后显示值背景的填充颜色
+  //The fill color of the displayed value background when selected
   Color selectFillColor = Color(0xff0D1722);
 
-  //分割线颜色
+  //dividing line color
   Color gridColor = Color(0xff4c5c74);
 
   Color infoWindowNormalColor = Color(0xffffffff);
@@ -49,7 +49,7 @@ class ChartColors {
   Color vCrossColor = Color(0x1Effffff);
   Color crossTextColor = Color(0xffffffff);
 
-  //当前显示内最大和最小值的颜色
+  //The color of the maximum and minimum values ​​in the current display
   Color maxColor = Color(0xffffffff);
   Color minColor = Color(0xffffffff);
 
@@ -72,40 +72,40 @@ class ChartStyle {
 
   double childPadding = 12.0;
 
-  //点与点的距离
+  //point-to-point distance
   double pointWidth = 11.0;
 
-  //蜡烛宽度
+  //candle width
   double candleWidth = 8.5;
 
-  //蜡烛中间线的宽度
+  //The width of the middle line of the candle
   double candleLineWidth = 1.5;
 
-  //vol柱子宽度
+  //vol column width
   double volWidth = 8.5;
 
-  //macd柱子宽度
+  //macd column width
   double macdWidth = 3.0;
 
-  //垂直交叉线宽度
+  //vertical crossbar width
   double vCrossWidth = 8.5;
 
-  //水平交叉线宽度
+  //horizontal crossbar width
   double hCrossWidth = 0.5;
 
-  //现在价格的线条长度
+  //Line length of current price
   double nowPriceLineLength = 1;
 
-  //现在价格的线条间隔
+  //Line interval for the current price
   double nowPriceLineSpan = 1;
 
-  //现在价格的线条粗细
+  //Line thickness of current price
   double nowPriceLineWidth = 1;
 
   int gridRows = 4;
 
   int gridColumns = 4;
 
-  //下方時間客製化
+  //Below time customization
   List<String>? dateTimeFormat;
 }

@@ -16,7 +16,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   MainState state;
   bool isLine;
 
-  //绘制的内容区域
+  //Painted content area
   late Rect _contentRect;
   double _contentPadding = 5.0;
   List<int> maDayList;
@@ -132,7 +132,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     ..style = PaintingStyle.fill
     ..isAntiAlias = true;
 
-  //画折线图
+  //Draw a line chart
   drawPolyline(double lastPrice, double curPrice, Canvas canvas, double lastX,
       double curX) {
 //    drawLine(lastPrice + 100, curPrice + 100, canvas, lastX, curX, ChartColors.kLineColor);
@@ -150,7 +150,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     mLinePath!.cubicTo((lastX + curX) / 2, getY(lastPrice), (lastX + curX) / 2,
         getY(curPrice), curX, getY(curPrice));
 
-    //画阴影
+    //draw shadows
     mLineFillShader ??= LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -214,25 +214,31 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     double r = mCandleWidth / 2;
     double lineR = mCandleLineWidth / 2;
     if (open >= close) {
-      // 实体高度>= CandleLineWidth
+      // entity height >= CandleLineWidth
       if (open - close < mCandleLineWidth) {
         open = close + mCandleLineWidth;
       }
       chartPaint.color = this.chartColors.upColor;
-      canvas.drawRect(
-          Rect.fromLTRB(curX - r, close, curX + r, open), chartPaint);
-      canvas.drawRect(
-          Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
+      canvas.drawRRect(
+          RRect.fromLTRBR(curX - r, close, curX + r, open, Radius.circular(3)),
+          chartPaint);
+      canvas.drawRRect(
+          RRect.fromLTRBR(
+              curX - lineR, high, curX + lineR, low, Radius.circular(3)),
+          chartPaint);
     } else if (close > open) {
-      // 实体高度>= CandleLineWidth
+      // entity height >= CandleLineWidth
       if (close - open < mCandleLineWidth) {
         open = close - mCandleLineWidth;
       }
       chartPaint.color = this.chartColors.dnColor;
-      canvas.drawRect(
-          Rect.fromLTRB(curX - r, open, curX + r, close), chartPaint);
-      canvas.drawRect(
-          Rect.fromLTRB(curX - lineR, high, curX + lineR, low), chartPaint);
+      canvas.drawRRect(
+          RRect.fromLTRBR(curX - r, open, curX + r, close, Radius.circular(3)),
+          chartPaint);
+      canvas.drawRRect(
+          RRect.fromLTRBR(
+              curX - lineR, high, curX + lineR, low, Radius.circular(3)),
+          chartPaint);
     }
   }
 
@@ -266,17 +272,23 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   }
 
   @override
-  void drawGrid(Canvas canvas, int gridRows, int gridColumns) {
-//    final int gridRows = 4, gridColumns = 4;
-    double rowSpace = chartRect.height / gridRows;
-    for (int i = 0; i <= gridRows; i++) {
-      canvas.drawLine(Offset(0, rowSpace * i + topPadding),
-          Offset(chartRect.width, rowSpace * i + topPadding), gridPaint);
-    }
+  void drawGrid(Canvas canvas, Size size, int gridRows, int gridColumns) {
+    final int gridRows = 4, gridColumns = 8;
+    // double rowSpace = chartRect.height / gridRows;
+    // for (int i = 0; i <= gridRows; i++) {
+    //   canvas.drawLine(Offset(0, rowSpace * i + topPadding),
+    //       Offset(chartRect.width, rowSpace * i + topPadding), gridPaint);
+    // }
     double columnSpace = chartRect.width / gridColumns;
     for (int i = 0; i <= columnSpace; i++) {
-      canvas.drawLine(Offset(columnSpace * i, topPadding / 3),
-          Offset(columnSpace * i, chartRect.bottom), gridPaint);
+      double dashWidth = 4, dashSpace = 4, startY = 0;
+      while (startY < size.width) {
+        canvas.drawLine(Offset(columnSpace * i, startY),
+            Offset(columnSpace * i, startY + dashWidth), gridPaint);
+        startY += dashWidth + dashSpace;
+      }
+      // canvas.drawLine(Offset(columnSpace * i, 0),
+      //     Offset(columnSpace * i, chartRect.bottom), gridPaint);
     }
   }
 

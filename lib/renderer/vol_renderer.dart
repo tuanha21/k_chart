@@ -11,12 +11,13 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
   VolRenderer(Rect mainRect, double maxValue, double minValue,
       double topPadding, int fixedLength, this.chartStyle, this.chartColors)
       : super(
-            chartRect: mainRect,
-            maxValue: maxValue,
-            minValue: minValue,
-            topPadding: topPadding,
-            fixedLength: fixedLength,
-            gridColor: chartColors.gridColor,) {
+          chartRect: mainRect,
+          maxValue: maxValue,
+          minValue: minValue,
+          topPadding: topPadding,
+          fixedLength: fixedLength,
+          gridColor: chartColors.gridColor,
+        ) {
     mVolWidth = this.chartStyle.volWidth;
   }
 
@@ -27,12 +28,13 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
     double top = getVolY(curPoint.vol);
     double bottom = chartRect.bottom;
     if (curPoint.vol != 0) {
-      canvas.drawRect(
-          Rect.fromLTRB(curX - r, top, curX + r, bottom),
+      canvas.drawRRect(
+          RRect.fromLTRBAndCorners(curX - r, top, curX + r, bottom,
+              topLeft: Radius.circular(4), topRight: Radius.circular(4)),
           chartPaint
             ..color = curPoint.close > curPoint.open
-                ? this.chartColors.upColor
-                : this.chartColors.dnColor);
+                ? this.chartColors.upColor.withOpacity(0.4)
+                : this.chartColors.dnColor.withOpacity(0.4));
     }
 
     if (lastPoint.MA5Volume != 0) {
@@ -82,12 +84,12 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
   }
 
   @override
-  void drawGrid(Canvas canvas, int gridRows, int gridColumns) {
+  void drawGrid(Canvas canvas, Size size, int gridRows, int gridColumns) {
     canvas.drawLine(Offset(0, chartRect.bottom),
         Offset(chartRect.width, chartRect.bottom), gridPaint);
     double columnSpace = chartRect.width / gridColumns;
     for (int i = 0; i <= columnSpace; i++) {
-      //vol垂直线
+      //vol vertical line
       canvas.drawLine(Offset(columnSpace * i, chartRect.top - topPadding),
           Offset(columnSpace * i, chartRect.bottom), gridPaint);
     }

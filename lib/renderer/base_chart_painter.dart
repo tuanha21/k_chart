@@ -25,12 +25,12 @@ abstract class BaseChartPainter extends CustomPainter {
   bool isOnTap;
   bool isLine;
 
-  //3块区域大小与位置
-  late Rect mMainRect;
+  //3 block size and location
+  late Rect mMainRect, mSecondRect;
   Rect? mVolRect, mSecondaryRect;
   late double mDisplayHeight, mWidth;
   double mTopPadding = 30.0, mBottomPadding = 20.0, mChildPadding = 12.0;
-  int mGridRows = 4, mGridColumns = 4;
+  int mGridRows = 8, mGridColumns = 8;
   int mStartIndex = 0, mStopIndex = 0;
   double mMainMaxValue = double.minPositive, mMainMinValue = double.maxFinite;
   double mVolMaxValue = double.minPositive, mVolMinValue = double.maxFinite;
@@ -41,10 +41,20 @@ abstract class BaseChartPainter extends CustomPainter {
   double mMainHighMaxValue = double.minPositive,
       mMainLowMinValue = double.maxFinite;
   int mItemCount = 0;
-  double mDataLen = 0.0; //数据占屏幕总长度
+  double mDataLen = 0.0; //The data accounts for the total length of the screen
   final ChartStyle chartStyle;
   late double mPointWidth;
-  List<String> mFormats = [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn]; //格式化时间
+  List<String> mFormats = [
+    yyyy,
+    '-',
+    mm,
+    '-',
+    dd,
+    ' ',
+    HH,
+    ':',
+    nn
+  ]; // format time
 
   BaseChartPainter(
     this.chartStyle, {
@@ -86,19 +96,20 @@ abstract class BaseChartPainter extends CustomPainter {
     int secondTime = datas![1].time ?? 0;
     int time = secondTime - firstTime;
     time ~/= 1000;
-    //月线
+    //month line
     if (time >= 24 * 60 * 60 * 28)
       mFormats = [yy, '-', mm];
-    //日线等
+    //day line etc.
     else if (time >= 24 * 60 * 60)
       mFormats = [yy, '-', mm, '-', dd];
-    //小时线等
+    //hour line etc
     else
       mFormats = [mm, '-', dd, ' ', HH, ':', nn];
   }
 
   @override
   void paint(Canvas canvas, Size size) {
+    var _size = Size(size.width - 50, size.height);
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     mDisplayHeight = size.height - mTopPadding - mBottomPadding;
     mWidth = size.width;
@@ -109,9 +120,9 @@ abstract class BaseChartPainter extends CustomPainter {
     canvas.save();
     canvas.scale(1, 1);
     drawBg(canvas, size);
-    drawGrid(canvas);
+    drawGrid(canvas, _size);
     if (datas != null && datas!.isNotEmpty) {
-      drawChart(canvas, size);
+      drawChart(canvas, _size);
       drawVerticalText(canvas);
       drawDate(canvas, size);
 
@@ -128,34 +139,34 @@ abstract class BaseChartPainter extends CustomPainter {
 
   void initChartRenderer();
 
-  //画背景
+  //Picture background
   void drawBg(Canvas canvas, Size size);
 
-  //画网格
-  void drawGrid(canvas);
+  //draw grid
+  void drawGrid(Canvas canvas, Size size);
 
-  //画图表
+  //drawChart
   void drawChart(Canvas canvas, Size size);
 
-  //画右边值
-  void drawVerticalText(canvas);
+  //drawVerticalText
+  void drawVerticalText(Canvas canvas);
 
-  //画时间
+  //drawDate
   void drawDate(Canvas canvas, Size size);
 
-  //画值
+  //drawText
   void drawText(Canvas canvas, KLineEntity data, double x);
 
-  //画最大最小值
+  //draw max min
   void drawMaxAndMin(Canvas canvas);
 
-  //画当前价格
+  //draw current price
   void drawNowPrice(Canvas canvas);
 
-  //画交叉线
+  //draw a cross
   void drawCrossLine(Canvas canvas, Size size);
 
-  //交叉线值
+  //crossbar value
   void drawCrossLineText(Canvas canvas, Size size);
 
   void initRect(Size size) {
@@ -168,13 +179,15 @@ abstract class BaseChartPainter extends CustomPainter {
     mainHeight -= secondaryHeight;
 
     mMainRect = Rect.fromLTRB(0, mTopPadding, mWidth, mTopPadding + mainHeight);
+    mSecondRect =
+        Rect.fromLTRB(0, mTopPadding, mWidth - 40, mTopPadding + mainHeight);
 
     if (volHidden != true) {
       mVolRect = Rect.fromLTRB(0, mMainRect.bottom + mChildPadding, mWidth,
           mMainRect.bottom + volHeight);
     }
 
-    //secondaryState == SecondaryState.NONE隐藏副视图
+    //secondaryState == SecondaryState.NONE hides the side view
     if (secondaryState != SecondaryState.NONE) {
       mSecondaryRect = Rect.fromLTRB(
           0,
@@ -291,7 +304,7 @@ abstract class BaseChartPainter extends CustomPainter {
   int indexOfTranslateX(double translateX) =>
       _indexOfTranslateX(translateX, 0, mItemCount - 1);
 
-  ///二分查找当前值的index
+  ///Binary search for the index of the current value
   int _indexOfTranslateX(double translateX, int start, int end) {
     if (end == start || end == -1) {
       return start;
@@ -314,9 +327,9 @@ abstract class BaseChartPainter extends CustomPainter {
     }
   }
 
-  ///根据索引索取x坐标
-  ///+ mPointWidth / 2防止第一根和最后一根k线显示不���
-  ///@param position 索引值
+  /// Get the x coordinate based on the index
+  ///+ mPointWidth /2 prevents the first and last bar from showing no
+  ///@param position index value
   double getX(int position) => position * mPointWidth + mPointWidth / 2;
 
   KLineEntity getItem(int position) {
@@ -328,17 +341,17 @@ abstract class BaseChartPainter extends CustomPainter {
     // }
   }
 
-  ///scrollX 转换为 TranslateX
+  ///scrollX convert to TranslateX
   void setTranslateXFromScrollX(double scrollX) =>
       mTranslateX = scrollX + getMinTranslateX();
 
-  ///获取平移的最小值
+  ///Get the minimum value of the translation
   double getMinTranslateX() {
     var x = -mDataLen + mWidth / scaleX - mPointWidth / 2;
     return x >= 0 ? 0.0 : x;
   }
 
-  ///计算长按后x的值，转换为index
+  ///Calculate the value of x after a long press and convert it to index
   int calculateSelectedX(double selectX) {
     int mSelectedIndex = indexOfTranslateX(xToTranslateX(selectX));
     if (mSelectedIndex < mStartIndex) {
@@ -350,7 +363,7 @@ abstract class BaseChartPainter extends CustomPainter {
     return mSelectedIndex;
   }
 
-  ///translateX转化为view中的x
+  ///translateX translates to x in view
   double translateXtoX(double translateX) =>
       (translateX + mTranslateX) * scaleX;
 

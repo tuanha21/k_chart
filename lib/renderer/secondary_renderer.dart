@@ -22,12 +22,13 @@ class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
       this.chartStyle,
       this.chartColors)
       : super(
-            chartRect: mainRect,
-            maxValue: maxValue,
-            minValue: minValue,
-            topPadding: topPadding,
-            fixedLength: fixedLength,
-            gridColor: chartColors.gridColor,) {
+          chartRect: mainRect,
+          maxValue: maxValue,
+          minValue: minValue,
+          topPadding: topPadding,
+          fixedLength: fixedLength,
+          gridColor: chartColors.gridColor,
+        ) {
     mMACDWidth = this.chartStyle.macdWidth;
   }
 
@@ -177,7 +178,7 @@ class SecondaryRenderer extends BaseChartRenderer<MACDEntity> {
   }
 
   @override
-  void drawGrid(Canvas canvas, int gridRows, int gridColumns) {
+  void drawGrid(Canvas canvas, Size size, int gridRows, int gridColumns) {
     canvas.drawLine(Offset(0, chartRect.top),
         Offset(chartRect.width, chartRect.top), gridPaint);
     canvas.drawLine(Offset(0, chartRect.bottom),

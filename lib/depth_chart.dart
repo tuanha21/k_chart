@@ -64,7 +64,7 @@ class _DepthChartState extends State<DepthChart> {
 }
 
 class DepthChartPainter extends CustomPainter {
-  //买入//卖出
+  //Buy - Sell
   List<DepthEntity>? mBuyData, mSellData;
   Offset? pressOffset;
   bool isLongPress;
@@ -76,15 +76,15 @@ class DepthChartPainter extends CustomPainter {
   double mWidth = 0.0, mDrawHeight = 0.0, mDrawWidth = 0.0;
   double? mBuyPointWidth, mSellPointWidth;
 
-  //最大的委托量
+  //Maximum order amount
   double? mMaxVolume, mMultiple;
 
-  //右侧绘制个数
+  //number of draws on the right
   int mLineCount = 4;
 
   Path? mBuyPath, mSellPath;
 
-  //买卖出区域边线绘制画笔  //买卖出取悦绘制画笔
+  //Buy and sell out area border drawing brush //Buy and sell pleasing drawing brush
   Paint? mBuyLinePaint,
       mSellLinePaint,
       mBuyPathPaint,
@@ -159,12 +159,12 @@ class DepthChartPainter extends CustomPainter {
     mDrawHeight = size.height - mPaddingBottom;
     // canvas.drawColor(Colors.green, BlendMode.srcATop);
     canvas.save();
-    //绘制买入区域
+    //draw the buy area
     drawBuy(canvas);
-    //绘制卖出区域
+    //draw the sell area
     drawSell(canvas);
 
-    //绘制界面相关文案
+    //Draw interface related text
     drawText(canvas);
     canvas.restore();
   }
@@ -330,7 +330,7 @@ class DepthChartPainter extends CustomPainter {
           mSellLinePaint!..style = PaintingStyle.stroke);
     }
 
-    //画底部
+    // draw the bottom
     TextPainter priceTP =
         getTextPainter(entity.price.toStringAsFixed(fixedLength!));
     priceTP.layout();
@@ -350,7 +350,7 @@ class DepthChartPainter extends CustomPainter {
         canvas,
         Offset(bottomRect.left + (bottomRect.width - priceTP.width) / 2,
             bottomRect.top + (bottomRect.height - priceTP.height) / 2));
-    //画左边
+    // draw the left
     TextPainter amountTP =
         getTextPainter(entity.vol.toStringAsFixed(fixedLength!));
     amountTP.layout();
@@ -373,7 +373,7 @@ class DepthChartPainter extends CustomPainter {
             rightRect.top + (rightRect.height - amountTP.height) / 2));
   }
 
-  ///二分查找当前值的index
+  ///Binary search for the index of the current value
   int _indexOfTranslateX(double translateX, int start, int end, Function getX) {
     if (end == start || end == -1) {
       return start;

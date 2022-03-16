@@ -1,4 +1,5 @@
-// ignore_for_file: non_constant_identifier_names,library_prefixes,unused_import,camel_case_types
+// ignore_for_file: non_constant_identifier_names
+
 mixin CandleEntity {
   late double open;
   late double high;
@@ -7,13 +8,13 @@ mixin CandleEntity {
 
   List<double>? maValueList;
 
-//  上轨线
+  //  upper track
   double? up;
 
-//  中轨线
+  //  Middle track
   double? mb;
 
-//  下轨线
+  //  lower
   double? dn;
 
   double? BOLLMA;
