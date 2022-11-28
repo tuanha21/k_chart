@@ -34,11 +34,11 @@ abstract class BaseChartPainter extends CustomPainter {
   bool isLine;
 
   //3 block size and location
-  late Rect mMainRect;
+  late Rect mMainRect, mSecondRect;
   Rect? mVolRect, mSecondaryRect;
   late double mDisplayHeight, mWidth, mTextWidth;
   double mTopPadding = 30.0, mBottomPadding = 20.0, mChildPadding = 12.0;
-  int mGridRows = 8, mGridColumns = 8;
+  int mGridRows = 4, mGridColumns = 4;
   int mStartIndex = 0, mStopIndex = 0;
   double mMainMaxValue = double.minPositive, mMainMinValue = double.maxFinite;
   double mVolMaxValue = double.minPositive, mVolMinValue = double.maxFinite;
@@ -117,10 +117,10 @@ abstract class BaseChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var _size = Size(size.width - 40, size.height);
+    var _size = Size(size.width - 50, size.height);
     canvas.clipRect(Rect.fromLTRB(0, 0, size.width, size.height));
     mDisplayHeight = size.height - mTopPadding - mBottomPadding;
-    mWidth = size.width - 40;
+    mWidth = size.width;
     mTextWidth = size.width;
     initRect(size);
     calculateValue();
@@ -188,7 +188,8 @@ abstract class BaseChartPainter extends CustomPainter {
     mainHeight -= secondaryHeight;
 
     mMainRect = Rect.fromLTRB(0, mTopPadding, mWidth, mTopPadding + mainHeight);
-
+    // mSecondRect =
+    //     Rect.fromLTRB(0, mTopPadding, mWidth - 40, mTopPadding + mainHeight);
     if (volHidden != true) {
       mVolRect = Rect.fromLTRB(0, mMainRect.bottom + mChildPadding, mWidth,
           mMainRect.bottom + volHeight);

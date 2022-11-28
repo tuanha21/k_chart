@@ -5,6 +5,7 @@ import '../k_chart_widget.dart' show MainState;
 import 'base_chart_renderer.dart';
 
 enum VerticalTextAlignment { left, right }
+
 //For TrendLine
 double? trendLineMax;
 double? trendLineScale;
@@ -248,10 +249,10 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
       double offsetX;
       switch (verticalTextAlignment) {
         case VerticalTextAlignment.left:
-          offsetX = chartRect.width + 40 - tp.width;
+          offsetX = 0;
           break;
         case VerticalTextAlignment.right:
-          offsetX = chartRect.width + 40 - tp.width;
+          offsetX = chartRect.width - tp.width;
           break;
       }
 
@@ -272,8 +273,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
     //   canvas.drawLine(Offset(0, rowSpace * i + topPadding),
     //       Offset(chartRect.width, rowSpace * i + topPadding), gridPaint);
     // }
-    double columnSpace = size.width / gridColumns;
-    for (int i = 0; i <= gridColumns; i++) {
+    double columnSpace = chartRect.width / gridColumns;
+    for (int i = 0; i <= columnSpace; i++) {
       double dashWidth = 4, dashSpace = 4, startY = 0;
       while (startY < size.width) {
         canvas.drawLine(Offset(columnSpace * i, startY),
