@@ -1,7 +1,8 @@
 import 'dart:async' show StreamSink;
-
+import 'package:intl/intl.dart' as intl;
 import 'package:flutter/material.dart';
 import 'package:k_chart/utils/number_util.dart';
+import 'dart:math';
 
 import '../entity/info_window_entity.dart';
 import '../entity/k_line_entity.dart';
@@ -49,41 +50,40 @@ class ChartPainter extends BaseChartPainter {
   final bool showNowPrice;
   final VerticalTextAlignment verticalTextAlignment;
 
-  ChartPainter(
-    this.chartStyle,
-    this.chartColors, {
-    required this.lines, //For TrendLine
-    required this.isTrendLine, //For TrendLine
-    required this.selectY, //For TrendLine
-    required datas,
-    required scaleX,
-    required scrollX,
-    required isLongPass,
-    required selectX,
-    isOnTap,
-    isTapShowInfoDialog,
-    required this.verticalTextAlignment,
-    mainState,
-    volHidden,
-    secondaryState,
-    this.sink,
-    bool isLine = false,
-    this.hideGrid = false,
-    this.showNowPrice = true,
-    this.fixedLength = 2,
-    this.maDayList = const [5, 10, 20],
-  }) : super(chartStyle,
-            datas: datas,
-            scaleX: scaleX,
-            scrollX: scrollX,
-            isLongPress: isLongPass,
-            isOnTap: isOnTap,
-            isTapShowInfoDialog: isTapShowInfoDialog,
-            selectX: selectX,
-            mainState: mainState,
-            volHidden: volHidden,
-            secondaryState: secondaryState,
-            isLine: isLine) {
+  ChartPainter(this.chartStyle,
+      this.chartColors, {
+        required this.lines, //For TrendLine
+        required this.isTrendLine, //For TrendLine
+        required this.selectY, //For TrendLine
+        required datas,
+        required scaleX,
+        required scrollX,
+        required isLongPass,
+        required selectX,
+        isOnTap,
+        isTapShowInfoDialog,
+        required this.verticalTextAlignment,
+        mainState,
+        volHidden,
+        secondaryState,
+        this.sink,
+        bool isLine = false,
+        this.hideGrid = false,
+        this.showNowPrice = true,
+        this.fixedLength = 2,
+        this.maDayList = const [5, 10, 20],
+      }) : super(chartStyle,
+      datas: datas,
+      scaleX: scaleX,
+      scrollX: scrollX,
+      isLongPress: isLongPass,
+      isOnTap: isOnTap,
+      isTapShowInfoDialog: isTapShowInfoDialog,
+      selectX: selectX,
+      mainState: mainState,
+      volHidden: volHidden,
+      secondaryState: secondaryState,
+      isLine: isLine) {
     selectPointPaint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = 0.5
@@ -120,8 +120,14 @@ class ChartPainter extends BaseChartPainter {
       maDayList,
     );
     if (mVolRect != null) {
-      mVolRenderer = VolRenderer(mVolRect!, mVolMaxValue, mVolMinValue,
-          mChildPadding, fixedLength, this.chartStyle, this.chartColors);
+      mVolRenderer = VolRenderer(
+          mVolRect!,
+          mVolMaxValue,
+          mVolMinValue,
+          mChildPadding,
+          fixedLength,
+          this.chartStyle,
+          this.chartColors);
     }
     if (mSecondaryRect != null) {
       mSecondaryRenderer = SecondaryRenderer(
@@ -145,7 +151,7 @@ class ChartPainter extends BaseChartPainter {
       colors: chartColors.bgColor,
     );
     Rect mainRect =
-        Rect.fromLTRB(0, 0, mMainRect.width, mMainRect.height + mTopPadding);
+    Rect.fromLTRB(0, 0, mMainRect.width, mMainRect.height + mTopPadding);
     canvas.drawRect(
         mainRect, mBgPaint..shader = mBgGradient.createShader(mainRect));
 
@@ -163,7 +169,7 @@ class ChartPainter extends BaseChartPainter {
           mBgPaint..shader = mBgGradient.createShader(secondaryRect));
     }
     Rect dateRect =
-        Rect.fromLTRB(0, size.height - mBottomPadding, size.width, size.height);
+    Rect.fromLTRB(0, size.height - mBottomPadding, size.width, size.height);
     canvas.drawRect(
         dateRect, mBgPaint..shader = mBgGradient.createShader(dateRect));
   }
@@ -204,9 +210,7 @@ class ChartPainter extends BaseChartPainter {
   }
 
   @override
-  void drawVerticalText(
-    canvas,
-  ) {
+  void drawVerticalText(canvas,) {
     var textStyle = getTextStyle(this.chartColors.defaultTextColor);
     if (!hideGrid) {
       mMainRenderer.drawVerticalText(canvas, textStyle, mGridRows);
@@ -297,7 +301,7 @@ class ChartPainter extends BaseChartPainter {
     }
 
     TextPainter dateTp =
-        getTextPainter(getDate(point.time), chartColors.crossTextColor);
+    getTextPainter(getDate(point.time), chartColors.crossTextColor);
     textWidth = dateTp.width;
     r = textHeight / 2;
     x = translateXtoX(getX(index));
@@ -322,6 +326,127 @@ class ChartPainter extends BaseChartPainter {
     //Nhấn và giữ để hiển thị chi tiết của dữ liệu này
     sink?.add(InfoWindowEntity(point, isLeft: isLeft));
   }
+
+  @override
+  void drawDialogText(Canvas canvas, Size size) {
+    var index = calculateSelectedX(selectX);
+    KLineEntity point = getItem(index);
+
+    ///mã chứng khoán or tên sàn
+    TextPainter codeTitle = getTextPainter('VNIndex ', Color(0xffA0AEC0));
+    /// điểm
+    TextPainter pointTP = getTextPainter(point.close, Color(0xff232338));
+
+    /// KL title
+    TextPainter volTitle = getTextPainter('KL khớp ', Color(0xffA0AEC0));
+    /// khối lượng
+    TextPainter vol = getTextPainter(formatMoneyRound(point.vol.toString()), Color(0xff232338));
+
+    /// tọa độ y
+    double y = getMainY(point.close);
+    /// tọa độ x
+    double x;
+    x = translateXtoX(getX(index));
+
+    print(x);
+    print(y);
+
+    /// thời gian
+    TextPainter dateTp =
+    getTextPainter(getDateTime(point.time), Color(0xffA0AEC0));
+
+    double maxWidth = max(codeTitle.width + pointTP.width, dateTp.width);
+
+    maxWidth = max(maxWidth, volTitle.width + vol.width);
+
+    /// tọa x độ vẽ dialog
+    double xd ;
+    if(x + maxWidth > size.width - 50){
+      xd = x - maxWidth - 10 - 16;
+    }else {
+      xd = x + 10;
+    }
+
+
+    /// tọa y độ vẽ dialog
+    var yd = y - (dateTp.height * 3 + 8) / 2;
+
+
+    /// vẽ box text
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(Rect.fromLTWH(xd, yd, maxWidth + 16,
+            dateTp.height * 3 + 8), Radius.circular(4)), Paint()
+      ..isAntiAlias = true
+      ..strokeWidth = 0.5
+      ..color = Color(0xffF5F8FF));
+
+
+    // canvas.drawRect(
+    //     Rect.fromLTRB(x, y, x + 200,
+    //         y + 200),
+    //     Paint()
+    //       ..isAntiAlias = true
+    //       ..strokeWidth = 0.5
+    //       ..style = PaintingStyle.stroke
+    //       ..color = Color(0xffF5F8FF));
+
+    /// vẽ điểm đang chọn
+    canvas.drawCircle(Offset(x, y), 5, Paint()
+      ..isAntiAlias = true
+      ..strokeWidth = 0.5
+      ..color = chartColors.kLineColor);
+
+    /// vẽ thời gian
+    dateTp.paint(canvas, Offset(xd + 8, yd + 4));
+
+    /// vẽ mã code
+    codeTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height));
+
+    /// vẽ điểm
+    pointTP.paint(canvas, Offset(xd + 8 + codeTitle.width, yd + 4 + dateTp.height));
+
+    volTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height * 2));
+
+    /// vẽ khối lượng
+    vol.paint(
+        canvas, Offset(xd + 8 + volTitle.width, yd + 4 + dateTp.height * 2));
+  }
+
+  String getDateTime(int? date) =>
+      dateFormat(
+          DateTime.fromMillisecondsSinceEpoch(
+              date ?? DateTime
+                  .now()
+                  .millisecondsSinceEpoch),
+          [
+            yyyy,
+            '-',
+            mm,
+            '-',
+            dd,
+            ' ',
+            HH,
+            ':',
+            nn
+          ]);
+
+  String formatMoneyRound(String _price) {
+    var df = intl.NumberFormat(
+        "###,###,###,###,###", 'en_US'); // or pattern "###,###.##$"
+    String money = "0";
+    try {
+      if (_price.isNotEmpty) {
+        double number = double.parse(_price);
+        money = df.format(number);
+      } else {
+        throw (Exception);
+      }
+    } catch (e) {
+      return "0";
+    }
+    return money;
+  }
+
 
   @override
   void drawText(Canvas canvas, KLineEntity data, double x) {
@@ -529,10 +654,13 @@ class ChartPainter extends BaseChartPainter {
     return tp;
   }
 
-  String getDate(int? date) => dateFormat(
-      DateTime.fromMillisecondsSinceEpoch(
-          date ?? DateTime.now().millisecondsSinceEpoch),
-      mFormats);
+  String getDate(int? date) =>
+      dateFormat(
+          DateTime.fromMillisecondsSinceEpoch(
+              date ?? DateTime
+                  .now()
+                  .millisecondsSinceEpoch),
+          mFormats);
 
   double getMainY(double y) => mMainRenderer.getY(y);
 

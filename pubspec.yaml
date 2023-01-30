@@ -6,11 +6,14 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  intl: ^0.17.0
   flutter:
     sdk: flutter
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 flutter:
