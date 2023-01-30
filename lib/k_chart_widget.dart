@@ -6,6 +6,7 @@ import 'package:k_chart/extension/map_ext.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 
 enum MainState { MA, BOLL, NONE }
+
 enum SecondaryState { MACD, KDJ, RSI, WR, CCI, NONE }
 
 class TimeFormat {
@@ -56,6 +57,7 @@ class KChartWidget extends StatefulWidget {
   final ChartStyle chartStyle;
   final VerticalTextAlignment verticalTextAlignment;
   final bool isTrendLine;
+  final String stockCode;
 
   KChartWidget(
     this.datas,
@@ -83,6 +85,7 @@ class KChartWidget extends StatefulWidget {
     this.flingCurve = Curves.decelerate,
     this.isOnDrag,
     this.verticalTextAlignment = VerticalTextAlignment.right,
+    required this.stockCode,
   });
 
   @override
@@ -139,9 +142,12 @@ class _KChartWidgetState extends State<KChartWidget>
     final _painter = ChartPainter(
       widget.chartStyle,
       widget.chartColors,
-      lines: lines, //For TrendLine
-      isTrendLine: widget.isTrendLine, //For TrendLine
-      selectY: mSelectY, //For TrendLine
+      lines: lines,
+      //For TrendLine
+      isTrendLine: widget.isTrendLine,
+      //For TrendLine
+      selectY: mSelectY,
+      //For TrendLine
       datas: widget.datas,
       scaleX: mScaleX,
       scrollX: mScrollX,
@@ -159,6 +165,7 @@ class _KChartWidgetState extends State<KChartWidget>
       fixedLength: widget.fixedLength,
       maDayList: widget.maDayList,
       verticalTextAlignment: widget.verticalTextAlignment,
+      stockCode: widget.stockCode,
     );
 
     return LayoutBuilder(
