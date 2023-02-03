@@ -351,9 +351,6 @@ class ChartPainter extends BaseChartPainter {
     double x;
     x = translateXtoX(getX(index));
 
-    print(x);
-    print(y);
-
     /// thời gian
     TextPainter dateTp =
         getTextPainter(getDateTime(point.time), Color(0xffA0AEC0));
