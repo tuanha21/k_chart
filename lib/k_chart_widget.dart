@@ -58,7 +58,7 @@ class KChartWidget extends StatefulWidget {
   final VerticalTextAlignment verticalTextAlignment;
   final bool isTrendLine;
   final String stockCode;
-
+  final bool showVolMA;
   KChartWidget(
     this.datas,
     this.chartStyle,
@@ -86,6 +86,7 @@ class KChartWidget extends StatefulWidget {
     this.isOnDrag,
     this.verticalTextAlignment = VerticalTextAlignment.right,
     required this.stockCode,
+    this.showVolMA = false,
   });
 
   @override
@@ -166,6 +167,7 @@ class _KChartWidgetState extends State<KChartWidget>
       maDayList: widget.maDayList,
       verticalTextAlignment: widget.verticalTextAlignment,
       stockCode: widget.stockCode,
+      showVolMA: widget.showVolMA,
     );
 
     return LayoutBuilder(

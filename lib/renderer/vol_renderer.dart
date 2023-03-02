@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 
@@ -7,10 +5,17 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
   late double mVolWidth;
   final ChartStyle chartStyle;
   final ChartColors chartColors;
-
-  VolRenderer(Rect mainRect, double maxValue, double minValue,
-      double topPadding, int fixedLength, this.chartStyle, this.chartColors)
-      : super(
+  final bool showMA;
+  VolRenderer(
+    Rect mainRect,
+    double maxValue,
+    double minValue,
+    double topPadding,
+    int fixedLength,
+    this.chartStyle,
+    this.chartColors,
+    this.showMA,
+  ) : super(
           chartRect: mainRect,
           maxValue: maxValue,
           minValue: minValue,
@@ -37,12 +42,12 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
                 : this.chartColors.dnColor.withOpacity(0.4));
     }
 
-    if (lastPoint.MA5Volume != 0) {
+    if (showMA && lastPoint.MA5Volume != 0) {
       drawLine(lastPoint.MA5Volume, curPoint.MA5Volume, canvas, lastX, curX,
           this.chartColors.ma5Color);
     }
 
-    if (lastPoint.MA10Volume != 0) {
+    if (showMA && lastPoint.MA10Volume != 0) {
       drawLine(lastPoint.MA10Volume, curPoint.MA10Volume, canvas, lastX, curX,
           this.chartColors.ma10Color);
     }
@@ -58,11 +63,11 @@ class VolRenderer extends BaseChartRenderer<VolumeEntity> {
         TextSpan(
             text: "VOL:${NumberUtil.format(data.vol)}    ",
             style: getTextStyle(this.chartColors.volColor)),
-        if (data.MA5Volume.notNullOrZero)
+        if (showMA && data.MA5Volume.notNullOrZero)
           TextSpan(
               text: "MA5:${NumberUtil.format(data.MA5Volume!)}    ",
               style: getTextStyle(this.chartColors.ma5Color)),
-        if (data.MA10Volume.notNullOrZero)
+        if (showMA && data.MA10Volume.notNullOrZero)
           TextSpan(
               text: "MA10:${NumberUtil.format(data.MA10Volume!)}    ",
               style: getTextStyle(this.chartColors.ma10Color)),

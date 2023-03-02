@@ -50,6 +50,7 @@ class ChartPainter extends BaseChartPainter {
   final bool showNowPrice;
   final VerticalTextAlignment verticalTextAlignment;
   final String stockCode;
+  final bool showVolMA;
 
   ChartPainter(
     this.chartStyle,
@@ -75,6 +76,7 @@ class ChartPainter extends BaseChartPainter {
     this.showNowPrice = true,
     this.fixedLength = 2,
     this.maDayList = const [5, 10, 20],
+    required this.showVolMA,
   }) : super(chartStyle,
             datas: datas,
             scaleX: scaleX,
@@ -123,8 +125,15 @@ class ChartPainter extends BaseChartPainter {
       maDayList,
     );
     if (mVolRect != null) {
-      mVolRenderer = VolRenderer(mVolRect!, mVolMaxValue, mVolMinValue,
-          mChildPadding, fixedLength, this.chartStyle, this.chartColors);
+      mVolRenderer = VolRenderer(
+          mVolRect!,
+          mVolMaxValue,
+          mVolMinValue,
+          mChildPadding,
+          fixedLength,
+          this.chartStyle,
+          this.chartColors,
+          showVolMA);
     }
     if (mSecondaryRect != null) {
       mSecondaryRenderer = SecondaryRenderer(
