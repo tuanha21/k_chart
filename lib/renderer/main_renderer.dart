@@ -101,9 +101,7 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
 
   List<InlineSpan> _createMATextSpan(CandleEntity data) {
     List<InlineSpan> result = [];
-    print(data.maValueList);
     for (int i = 0; i < (data.maValueList?.length ?? 0); i++) {
-      print(i);
       if (data.maValueList?[i] != 0) {
         var item = TextSpan(
             text: "MA${maDayList[i]}:${format(data.maValueList![i])}    ",
