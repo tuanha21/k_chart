@@ -401,9 +401,7 @@ class _KChartWidgetState extends State<KChartWidget>
               itemExtent: 14.0,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                final translations = widget.isChinese
-                    ? kChartTranslations['zh_CN']!
-                    : widget.translations.of(context);
+                final translations = widget.translations.of(context);
 
                 return _buildItem(
                   infos[index],
