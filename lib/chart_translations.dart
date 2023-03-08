@@ -38,6 +38,8 @@ class ChartTranslations {
       case 6:
         return change;
       case 7:
+        return volumn;
+      case 8:
         return amount;
     }
 
