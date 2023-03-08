@@ -7,6 +7,7 @@ class ChartTranslations {
   final String changeAmount;
   final String change;
   final String amount;
+  final String volumn;
 
   const ChartTranslations({
     this.date = 'Date',
@@ -17,6 +18,7 @@ class ChartTranslations {
     this.changeAmount = 'Change',
     this.change = 'Change%',
     this.amount = 'Amount',
+    this.volumn = 'Volumn',
   });
 
   String byIndex(int index) {
@@ -52,6 +54,7 @@ const kChartTranslations = {
     close: 'Giá đóng cửa',
     changeAmount: 'Tăng giảm khối lượng',
     change: 'Tăng giảm giá trị',
-    amount: 'khối lượng',
+    volumn: 'Khối lượng',
+    amount: 'Số lượng',
   ),
 };

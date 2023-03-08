@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/extension/map_ext.dart';
 import 'package:k_chart/flutter_k_chart.dart';
@@ -367,12 +368,18 @@ class _KChartWidgetState extends State<KChartWidget>
           final double? entityAmount = entity.amount;
           infos = [
             getDate(entity.time),
-            entity.open.toStringAsFixed(widget.fixedLength),
-            entity.high.toStringAsFixed(widget.fixedLength),
-            entity.low.toStringAsFixed(widget.fixedLength),
-            entity.close.toStringAsFixed(widget.fixedLength),
+            formatDouble(entity.open),
+            formatDouble(entity.high),
+            formatDouble(entity.low),
+            formatDouble(entity.close),
+            // entity.open.toStringAsFixed(widget.fixedLength),
+            // entity.high.toStringAsFixed(widget.fixedLength),
+            // entity.low.toStringAsFixed(widget.fixedLength),
+            // entity.close.toStringAsFixed(widget.fixedLength),
             "${upDown > 0 ? "+" : ""}${upDown.toStringAsFixed(widget.fixedLength)}",
             "${upDownPercent > 0 ? "+" : ''}${upDownPercent.toStringAsFixed(2)}%",
+            formatDouble(entity.vol),
+            // entity.vol.toStringAsFixed(widget.fixedLength),
             if (entityAmount != null) entityAmount.toInt().toString()
           ];
           final dialogPadding = 4.0;
@@ -434,4 +441,16 @@ class _KChartWidgetState extends State<KChartWidget>
       DateTime.fromMillisecondsSinceEpoch(
           date ?? DateTime.now().millisecondsSinceEpoch),
       widget.timeFormat);
+
+  String formatDouble(num? number, [String? nullString]) {
+    if (number == null) return nullString ?? "";
+    try {
+      return doubleFormat.format(number);
+    } catch (e) {
+      return nullString ?? "";
+    }
+  }
 }
+
+final NumberFormat doubleFormat =
+    NumberFormat("###,###,###,###,###.##", "en_US");
