@@ -335,94 +335,94 @@ class ChartPainter extends BaseChartPainter {
     sink?.add(InfoWindowEntity(point, isLeft: isLeft));
   }
 
-  @override
-  void drawDialogText(Canvas canvas, Size size) {
-    var index = calculateSelectedX(selectX);
-    KLineEntity point = getItem(index);
+  // @override
+  // void drawDialogText(Canvas canvas, Size size) {
+  //   var index = calculateSelectedX(selectX);
+  //   KLineEntity point = getItem(index);
 
-    ///mã chứng khoán or tên sàn
-    TextPainter codeTitle = getTextPainter('$stockCode ', Color(0xffA0AEC0));
+  //   ///mã chứng khoán or tên sàn
+  //   TextPainter codeTitle = getTextPainter('$stockCode ', Color(0xffA0AEC0));
 
-    /// điểm
-    TextPainter pointTP = getTextPainter(point.close, Color(0xff232338));
+  //   /// điểm
+  //   TextPainter pointTP = getTextPainter(point.close, Color(0xff232338));
 
-    /// KL title
-    TextPainter volTitle = getTextPainter('KL khớp ', Color(0xffA0AEC0));
+  //   /// KL title
+  //   TextPainter volTitle = getTextPainter('KL khớp ', Color(0xffA0AEC0));
 
-    /// khối lượng
-    TextPainter vol = getTextPainter(
-        formatMoneyRound(point.vol.toString()), Color(0xff232338));
+  //   /// khối lượng
+  //   TextPainter vol = getTextPainter(
+  //       formatMoneyRound(point.vol.toString()), Color(0xff232338));
 
-    /// tọa độ y
-    double y = getMainY(point.close);
+  //   /// tọa độ y
+  //   double y = getMainY(point.close);
 
-    /// tọa độ x
-    double x;
-    x = translateXtoX(getX(index));
+  //   /// tọa độ x
+  //   double x;
+  //   x = translateXtoX(getX(index));
 
-    /// thời gian
-    TextPainter dateTp =
-        getTextPainter(getDateTime(point.time), Color(0xffA0AEC0));
+  //   /// thời gian
+  //   TextPainter dateTp =
+  //       getTextPainter(getDateTime(point.time), Color(0xffA0AEC0));
 
-    double maxWidth = max(codeTitle.width + pointTP.width, dateTp.width);
+  //   double maxWidth = max(codeTitle.width + pointTP.width, dateTp.width);
 
-    maxWidth = max(maxWidth, volTitle.width + vol.width);
+  //   maxWidth = max(maxWidth, volTitle.width + vol.width);
 
-    /// tọa x độ vẽ dialog
-    double xd;
-    if (x + maxWidth > size.width - 50) {
-      xd = x - maxWidth - 10 - 16;
-    } else {
-      xd = x + 10;
-    }
+  //   /// tọa x độ vẽ dialog
+  //   double xd;
+  //   if (x + maxWidth > size.width - 50) {
+  //     xd = x - maxWidth - 10 - 16;
+  //   } else {
+  //     xd = x + 10;
+  //   }
 
-    /// tọa y độ vẽ dialog
-    var yd = y - (dateTp.height * 3 + 8) / 2;
+  //   /// tọa y độ vẽ dialog
+  //   var yd = y - (dateTp.height * 3 + 8) / 2;
 
-    /// vẽ box text
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(xd, yd, maxWidth + 16, dateTp.height * 3 + 8),
-            Radius.circular(4)),
-        Paint()
-          ..isAntiAlias = true
-          ..strokeWidth = 0.5
-          ..color = Color(0xffF5F8FF));
+  //   /// vẽ box text
+  //   canvas.drawRRect(
+  //       RRect.fromRectAndRadius(
+  //           Rect.fromLTWH(xd, yd, maxWidth + 16, dateTp.height * 3 + 8),
+  //           Radius.circular(4)),
+  //       Paint()
+  //         ..isAntiAlias = true
+  //         ..strokeWidth = 0.5
+  //         ..color = Color(0xffF5F8FF));
 
-    // canvas.drawRect(
-    //     Rect.fromLTRB(x, y, x + 200,
-    //         y + 200),
-    //     Paint()
-    //       ..isAntiAlias = true
-    //       ..strokeWidth = 0.5
-    //       ..style = PaintingStyle.stroke
-    //       ..color = Color(0xffF5F8FF));
+  //   // canvas.drawRect(
+  //   //     Rect.fromLTRB(x, y, x + 200,
+  //   //         y + 200),
+  //   //     Paint()
+  //   //       ..isAntiAlias = true
+  //   //       ..strokeWidth = 0.5
+  //   //       ..style = PaintingStyle.stroke
+  //   //       ..color = Color(0xffF5F8FF));
 
-    /// vẽ điểm đang chọn
-    canvas.drawCircle(
-        Offset(x, y),
-        5,
-        Paint()
-          ..isAntiAlias = true
-          ..strokeWidth = 0.5
-          ..color = chartColors.kLineColor);
+  //   /// vẽ điểm đang chọn
+  //   canvas.drawCircle(
+  //       Offset(x, y),
+  //       5,
+  //       Paint()
+  //         ..isAntiAlias = true
+  //         ..strokeWidth = 0.5
+  //         ..color = chartColors.kLineColor);
 
-    /// vẽ thời gian
-    dateTp.paint(canvas, Offset(xd + 8, yd + 4));
+  //   /// vẽ thời gian
+  //   dateTp.paint(canvas, Offset(xd + 8, yd + 4));
 
-    /// vẽ mã code
-    codeTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height));
+  //   /// vẽ mã code
+  //   codeTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height));
 
-    /// vẽ điểm
-    pointTP.paint(
-        canvas, Offset(xd + 8 + codeTitle.width, yd + 4 + dateTp.height));
+  //   /// vẽ điểm
+  //   pointTP.paint(
+  //       canvas, Offset(xd + 8 + codeTitle.width, yd + 4 + dateTp.height));
 
-    volTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height * 2));
+  //   volTitle.paint(canvas, Offset(xd + 8, yd + 4 + dateTp.height * 2));
 
-    /// vẽ khối lượng
-    vol.paint(
-        canvas, Offset(xd + 8 + volTitle.width, yd + 4 + dateTp.height * 2));
-  }
+  //   /// vẽ khối lượng
+  //   vol.paint(
+  //       canvas, Offset(xd + 8 + volTitle.width, yd + 4 + dateTp.height * 2));
+  // }
 
   String getDateTime(int? date) => dateFormat(
       DateTime.fromMillisecondsSinceEpoch(

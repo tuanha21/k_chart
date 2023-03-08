@@ -119,8 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
               showNowPrice: _showNowPrice,
               //`isChinese` is Deprecated, Use `translations` instead.
               hideGrid: _hideGrid,
-              isTapShowInfoDialog: false,
-              maDayList: [1, 100, 1000], stockCode: '',
+              isTapShowInfoDialog: true,
+              maDayList: [5, 20], stockCode: 'VNI',
+              showInfoDialog: true,
+              materialInfoDialog: true,
             ),
           ),
           if (showLoading)
@@ -254,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .reversed
         .toList()
         .cast<KLineEntity>();
-    DataUtil.calculate(datas!);
+    DataUtil.calculate(datas!, [5, 20]);
     showLoading = false;
     setState(() {});
   }

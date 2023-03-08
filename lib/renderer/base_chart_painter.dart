@@ -141,8 +141,7 @@ abstract class BaseChartPainter extends CustomPainter {
 
       if (isLongPress == true || (isTapShowInfoDialog && isOnTap)) {
         drawCrossLineText(canvas, size);
-        drawDialogText(canvas,size);
-
+        // drawDialogText(canvas, size);
       }
     }
     canvas.restore();
@@ -180,8 +179,8 @@ abstract class BaseChartPainter extends CustomPainter {
   //crossbar value
   void drawCrossLineText(Canvas canvas, Size size);
 
-  // bảng thông tin chi tiết
-  void drawDialogText(Canvas canvas, Size size);
+  // // bảng thông tin chi tiết
+  // void drawDialogText(Canvas canvas, Size size);
 
   void initRect(Size size) {
     double volHeight = volHidden != true ? mDisplayHeight * 0.2 : 0;
