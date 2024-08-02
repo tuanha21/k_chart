@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
       child: Text(text),
       style: TextButton.styleFrom(
-        primary: Colors.white,
+        foregroundColor: Colors.white,
         minimumSize: const Size(88, 44),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         shape: const RoundedRectangleBorder(
